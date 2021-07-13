@@ -34,21 +34,17 @@ const getUserMe = (req, res, next) => {
 
 const createUser = (req, res, next) => {
   const {
-    email, password, name, about, avatar,
+    email, password, name
   } = req.body;
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
       email,
       password: hash,
-      name,
-      about,
-      avatar,
+      name
     }))
     .then((user) => res.send({
       _id: user._id,
       name: user.name,
-      about: user.about,
-      avatar: user.avatar,
       email: user.email,
     }))
     .catch((err) => {
