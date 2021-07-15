@@ -26,7 +26,7 @@ const movieValidation = celebrate({
 const {
   getMovies,
   createMovie,
-  deleteMovie
+  deleteMovie,
 } = require('../controllers/movie');
 
 router.get('/', getMovies);

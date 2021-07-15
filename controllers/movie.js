@@ -3,6 +3,7 @@ const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
 const ConflictError = require('../errors/ConflictError');
 const ForbiddenError = require('../errors/ForbiddenError');
+
 const errorHandle = (err, next) => {
   if (err.name === 'ValidationError') {
     throw new BadRequestError('Ошибка обработки запроса');
@@ -73,6 +74,7 @@ const deleteMovie = (req, res, next) => {
     })
     .catch(next);
 };
+
 module.exports = {
   getMovies,
   createMovie,

@@ -10,7 +10,7 @@ const validateUpdateUser = celebrate({
 
 const {
   updateUser,
-  getUserMe
+  getUserMe,
 } = require('../controllers/users');
 
 router.get('/me', getUserMe);

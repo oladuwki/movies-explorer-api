@@ -4,6 +4,7 @@ const User = require('../models/user');
 const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
 const ConflictError = require('../errors/ConflictError');
+
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 const errorHandle = (err, next) => {
@@ -34,13 +35,15 @@ const getUserMe = (req, res, next) => {
 
 const createUser = (req, res, next) => {
   const {
-    email, password, name
+    email,
+    password,
+    name,
   } = req.body;
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
       email,
       password: hash,
-      name
+      name,
     }))
     .then((user) => res.send({
       _id: user._id,
