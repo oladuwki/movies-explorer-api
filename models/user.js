@@ -6,11 +6,11 @@ const AuthError = require('../errors/AuthError');
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
-    unique: true,
     required: true,
+    unique: true,
     validate: {
-      validator: (e) => isEmail(e),
-      message: 'Некорректный e-mail',
+      validator: (v) => isEmail(v),
+      message: 'Неправильный формат почты',
     },
   },
   password: {

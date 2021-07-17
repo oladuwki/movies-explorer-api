@@ -14,15 +14,16 @@ const errorHandle = (err, next) => {
   }
   next(err);
 };
+
 const getMovies = (req, res, next) => {
   Movie.find({ owner: req.user._id })
     .populate('owner')
     .then((movies) => res.send(movies))
     .catch((err) => {
       errorHandle(err, next);
-    })
-    .catch(next);
+    });
 };
+
 const createMovie = (req, res, next) => {
   const {
     country, director, duration, year, description,
@@ -45,12 +46,12 @@ const createMovie = (req, res, next) => {
     .then((movie) => res.send(movie))
     .catch((err) => {
       errorHandle(err, next);
-    })
-    .catch(next);
+    });
 };
+
 const deleteMovie = (req, res, next) => {
-  const { movieId } = req.params;
-  Movie.findById(movieId)
+  const { _id } = req.params;
+  Movie.findById(_id)
     .then((movie) => {
       if (!movie) {
         throw new NotFoundError('Запрашиваемый ресурс не найден');
@@ -59,11 +60,8 @@ const deleteMovie = (req, res, next) => {
       const movieOwnerId = movie.owner._id.toString();
       const movieIsMine = userId === movieOwnerId;
       if (movieIsMine) {
-        Movie.findByIdAndRemove(movieId)
+        Movie.findByIdAndRemove(_id)
           .then((deletedMovies) => res.send(deletedMovies))
-          .catch((err) => {
-            errorHandle(err, next);
-          })
           .catch(next);
       } else {
         throw new ForbiddenError('Вы не можете этого сделать');
@@ -71,8 +69,7 @@ const deleteMovie = (req, res, next) => {
     })
     .catch((err) => {
       errorHandle(err, next);
-    })
-    .catch(next);
+    });
 };
 
 module.exports = {

@@ -29,8 +29,7 @@ const getUserMe = (req, res, next) => {
     })
     .catch((err) => {
       errorHandle(err, next);
-    })
-    .catch(next);
+    });
 };
 
 const createUser = (req, res, next) => {
@@ -52,8 +51,7 @@ const createUser = (req, res, next) => {
     }))
     .catch((err) => {
       errorHandle(err, next);
-    })
-    .catch(next);
+    });
 };
 
 const login = (req, res, next) => {
@@ -69,8 +67,7 @@ const login = (req, res, next) => {
     })
     .catch((err) => {
       errorHandle(err, next);
-    })
-    .catch(next);
+    });
 };
 
 const updateUser = (req, res, next) => {
@@ -84,8 +81,7 @@ const updateUser = (req, res, next) => {
     })
     .catch((err) => {
       errorHandle(err, next);
-    })
-    .catch(next);
+    });
 };
 
 module.exports = {
