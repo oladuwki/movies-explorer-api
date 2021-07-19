@@ -2,28 +2,30 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const { limiter } = require('./middlewares/limiter');
 const router = require('./routes/index');
-const errorRoutes = require('./routes/error');
+const NotFoundError = require('./errors/NotFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
+  useUnifiedTopology: true,
 });
 
 const options = {
   origin: [
     'http://localhost:3000',
-    'https://api.oladuwki.nomoredomains.club',
-    'https://oladuwki.nomoredomains.club',
-    'https://api.oladuwki.nomoredomains.club/users/me',
+    'http://api.oladuwki-movies.nomoredomains.rocks/',
   ],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   preflightContinue: false,
@@ -33,10 +35,12 @@ const options = {
 };
 app.use('*', cors(options));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(limiter);
 app.use(cookieParser());
-
+app.use(helmet());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(requestLogger);
 
 app.get('/crash-test', () => {
@@ -47,18 +51,24 @@ app.get('/crash-test', () => {
 
 app.use(router);
 
+app.use('*', (req, res, next) => {
+  const err = new NotFoundError('Запрашиваемый ресурс не найден');
+  next(err);
+});
+
 app.use(errorLogger);
 
-router.use('/', errorRoutes);
 app.use(errors());
 
-// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
   res.status(statusCode).send({
     message: statusCode === 500 ? 'На сервере произошла ошибка' : message,
   });
+  next();
 });
+
+app.disable('x-powered-by');
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console

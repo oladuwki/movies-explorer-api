@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const movieSchema = new mongoose.Schema({
-
   country: {
     type: String,
     required: true,
@@ -25,26 +24,14 @@ const movieSchema = new mongoose.Schema({
   image: {
     type: String,
     required: true,
-    validate: {
-      validator: (v) => /^(https?:\/\/)([\da-z.-]+)\.([a-z.]{2,6})([/\w\W.-]*)#?$/g.test(v),
-      message: 'Некорректный URL',
-    },
   },
   trailer: {
     type: String,
     required: true,
-    validate: {
-      validator: (v) => /^(https?:\/\/)([\da-z.-]+)\.([a-z.]{2,6})([/\w\W.-]*)#?$/g.test(v),
-      message: 'Некорректный URL',
-    },
   },
   thumbnail: {
     type: String,
     required: true,
-    validate: {
-      validator: (v) => /^(https?:\/\/)([\da-z.-]+)\.([a-z.]{2,6})([/\w\W.-]*)#?$/g.test(v),
-      message: 'Некорректный URL',
-    },
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
