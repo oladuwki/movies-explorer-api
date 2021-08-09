@@ -25,16 +25,16 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 const options = {
   origin: [
     'http://localhost:3000',
-    'https://api.oladuwki-movies.nomoredomains.rocks/',
-    'http://api.oladuwki-movies.nomoredomains.rocks/',
-    'https://oladuwki-movies.nomoredomains.monster/',
-    'http://oladuwki-movies.nomoredomains.monster/',
+    'https://api.oladuwki-movies.nomoredomains.rocks',
+    'http://api.oladuwki-movies.nomoredomains.rocks',
+    'https://oladuwki-movies.nomoredomains.monster',
+    'http://oladuwki-movies.nomoredomains.monster',
   ],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   preflightContinue: false,
   optionsSuccessStatus: 204,
-  allowedHeaders: ['Content-Type', 'Origin'],
-  // credentials: true,
+  allowedHeaders: ['Content-Type', 'Origin', 'Authorization'],
+  credentials: true,
 };
 app.use('*', cors(options));
 
